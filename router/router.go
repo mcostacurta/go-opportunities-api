@@ -2,10 +2,10 @@ package router
 
 import "github.com/gin-gonic/gin"
 
-func Initialize() {
+func Initialize() *gin.Engine {
 	router := gin.Default()
 
 	initializeRoutes(router)
 
-	router.Run(":8080")
+	return router
 }

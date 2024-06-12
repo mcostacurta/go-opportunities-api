@@ -2,19 +2,35 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mcostacurta/go-opportunities-api/handler"
+	docs "github.com/mcostacurta/gooportunities/docs"
+	handler "github.com/mcostacurta/gooportunities/handler"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 func initializeRoutes(router *gin.Engine) {
+	handler.InitializeHandler()
 
-	v1 := router.Group("/api/v1")
+	basePath := "/api/v1"
+
+	docs.SwaggerInfo.BasePath = basePath
+
+	v1 := router.Group(basePath)
 	{
-		v1.GET("/opening", handler.ShowOpeningHandler)
-		v1.POST("/opening", handler.CreateOpeningHandler)
-		v1.DELETE("/opening", handler.DeleteOpeningHandler)
-		v1.PUT("/opening", handler.UpdateOpeningHandler)
-		v1.GET("/openings", handler.ListOpeningsHandler)
+		v1Opennings := v1.Group("openings")
+
+		v1Opennings.GET("/", addCommonResponseHeaders, handler.ListOpeningsHandler)
+		v1Opennings.GET("/:id", addCommonResponseHeaders, handler.ShowOpeningHandler)
+		v1Opennings.POST("/", addCommonResponseHeaders, handler.CreateOpeningHandler)
+		v1Opennings.DELETE("/:id", addCommonResponseHeaders, handler.DeleteOpeningHandler)
+		v1Opennings.PUT("/:id", addCommonResponseHeaders, handler.UpdateOpeningHandler)
 
 	}
+	router.GET("/health", addCommonResponseHeaders, handler.HealthCheck)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+}
+
+func addCommonResponseHeaders(ctx *gin.Context) {
+	ctx.Header("Cache-Control", "no-cache, no-store")
 }

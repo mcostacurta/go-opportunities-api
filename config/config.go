@@ -1,6 +1,10 @@
 package config
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+
+	"gorm.io/gorm"
+)
 
 var (
 	db     *gorm.DB
@@ -8,7 +12,18 @@ var (
 )
 
 func Init() error {
+	var err error
+
+	db, err = InitializeSQLLite()
+	if err != nil {
+		return fmt.Errorf("error initializing sqllite: %v", err)
+	}
+
 	return nil
+}
+
+func GetSQLLite() *gorm.DB {
+	return db
 }
 
 func GetLogger(prefix string) *Logger {

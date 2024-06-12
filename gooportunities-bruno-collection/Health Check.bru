@@ -1,0 +1,22 @@
+meta {
+  name: Health Check
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://127.0.0.1:8080/health
+  body: none
+  auth: none
+}
+
+body:json {
+  {
+    "role":"Senior da vida e do Universo",
+    "company": "Feras Soft",
+    "location": "New York",
+    "remote": true,
+    "salary": 520000,
+    "link": "vaga.com"
+  }
+}

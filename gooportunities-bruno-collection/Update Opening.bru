@@ -1,0 +1,17 @@
+meta {
+  name: Update Opening
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://127.0.0.1:8080/api/v1/openings/4
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "location": "Canada"
+  }
+}
